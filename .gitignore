@@ -1,0 +1,7 @@
+.private/
+.runtime/
+outputs/
+node_modules/
+__pycache__/
+*.log
+.DS_Store
