@@ -1,5 +1,6 @@
 .private/
 .runtime/
+.site-building/
 outputs/
 node_modules/
 __pycache__/

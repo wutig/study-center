@@ -1,0 +1,194 @@
+/* The same reading desk, sized for a phone and the Safari browser chrome. */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+.reading-settings-popover[data-popover-fallback="true"]:not([hidden]) { opacity: 1; transform: none; }
+
+@media (max-width: 900px) and (pointer: coarse), (max-width: 600px) {
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(150px + var(--safe-top)); }
+  body { overflow-x: clip; }
+  input:not([type="checkbox"]):not([type="file"]), select, textarea,
+  body[data-view="reader"] .notes-textarea,
+  body[data-view="reader"] .search-box input,
+  body[data-view="reader"] .chapter-select select,
+  #conflict-merged-notes { font-size: 16px; }
+  button, .button, .text-button, summary { touch-action: manipulation; }
+  .button, .icon-button, .text-button, .filter-tab, .source-link,
+  .mark-button, .reviewed-button, .back-to-top {
+    min-height: 44px; min-width: 44px;
+  }
+  .icon-button, .back-to-top { width: 44px; height: 44px; flex-shrink: 0; }
+
+  /* Preserve the cover composition; leave room for the notch and Home indicator. */
+  body[data-view="home"] .topbar {
+    padding: calc(14px + var(--safe-top)) calc(17px + var(--safe-right)) 0 calc(17px + var(--safe-left));
+    height: auto; min-height: 114px; gap: 8px; flex-wrap: wrap;
+  }
+  body[data-view="home"] .brand { min-height: 44px; }
+  body[data-view="home"] .brand-copy { max-width: calc(100vw - 95px - var(--safe-left) - var(--safe-right)); }
+  body[data-view="home"] .brand small.quote-line { font-size: 11px; max-width: 100%; }
+  body[data-view="home"] .top-actions { width: 100%; gap: 4px; min-height: 44px; }
+  body[data-view="home"] .top-actions .button,
+  body[data-view="home"] #home-fullscreen-button { min-height: 44px; font-size: 11px; padding-inline: 8px; }
+  body[data-view="home"] .top-actions .icon-button { width: 44px; height: 44px; min-height: 44px; }
+  body[data-view="home"] .app-notice { top: calc(118px + var(--safe-top)); padding-inline: 16px; }
+  .home-view.hero-home { height: 100vh; height: 100dvh; min-height: 560px; }
+  .hero-bottom {
+    left: calc(19px + var(--safe-left)); right: calc(19px + var(--safe-right));
+    bottom: calc(82px + var(--safe-bottom)); gap: 16px;
+  }
+  .hero-baseline {
+    left: calc(19px + var(--safe-left)); right: calc(19px + var(--safe-right));
+    bottom: calc(12px + var(--safe-bottom)); min-height: 44px;
+  }
+  .hero-course-button { min-height: 52px; font-size: 12px; letter-spacing: .035em; padding-inline: 9px; }
+  .hero-entry .home-resume .button { min-height: 44px; font-size: 12px; }
+  .hero-entry .home-resume h2 { font-size: 14px; }
+  .hero-entry .home-resume p, .hero-entry .resume-kicker { font-size: 11px; }
+  #hero-motion-toggle { min-height: 44px; font-size: 11px; padding: 8px; }
+  .hero-status { bottom: calc(2px + var(--safe-bottom)); }
+  .campaign-preview-status, #campaign-next-milestone, .campaign-mini-legend { font-size: 10px; }
+  .campaign-expand-hint { font-size: 10px; }
+
+  /* The reading navigation stays available without squeezing the document. */
+  body[data-view="reader"] .topbar {
+    height: auto; min-height: calc(108px + var(--safe-top));
+    padding: calc(10px + var(--safe-top)) calc(14px + var(--safe-right)) 7px calc(14px + var(--safe-left));
+    flex-wrap: wrap; gap: 4px; align-content: center;
+  }
+  body[data-view="reader"] .brand { max-width: 100%; min-height: 44px; }
+  body[data-view="reader"] .brand-copy { width: auto; max-width: calc(100vw - 90px - var(--safe-left) - var(--safe-right)); }
+  body[data-view="reader"] .brand small.quote-line { max-width: 100%; font-size: 11px; }
+  body[data-view="reader"] .top-actions { width: 100%; justify-content: flex-end; gap: 5px; }
+  body[data-view="reader"] .top-actions .button { min-height: 44px; font-size: 12px; padding: 8px 10px; }
+  body[data-view="reader"] .top-actions .icon-button { width: 44px; height: 44px; }
+  body[data-view="reader"] .reader-view .main-content {
+    padding: 0 calc(12px + var(--safe-right)) calc(36px + var(--safe-bottom)) calc(12px + var(--safe-left));
+  }
+  body[data-view="reader"] .route-bar {
+    top: var(--mobile-header-height, calc(108px + var(--safe-top))); min-height: 58px;
+    margin-inline: -2px; margin-bottom: 20px; padding: 7px 2px; gap: 8px;
+  }
+  body[data-view="reader"] .route-bar .button { min-height: 44px; font-size: 12px; padding-inline: 9px; }
+  body[data-view="reader"] .route-bar #back-home { margin-left: 0; }
+  body[data-view="reader"] .route-context { font-size: 11px; letter-spacing: 0; }
+  body[data-view="reader"].is-immersive .route-bar,
+  body[data-view="reader"].is-fullscreen .route-bar {
+    top: 0; padding-top: calc(7px + var(--safe-top));
+  }
+  body[data-view="reader"] .book-heading { padding: 22px 18px; }
+  body[data-view="reader"] .book-title-row { flex-wrap: wrap; }
+  body[data-view="reader"] .book-title-row h1 { font-size: 34px; }
+  body[data-view="reader"] .book-title-row .button { min-height: 44px; font-size: 12px; }
+  body[data-view="reader"] .book-subtitle, body[data-view="reader"] .book-meta { font-size: 12px; }
+  body[data-view="reader"] .book-scope { font-size: 12px; }
+  body[data-view="reader"] .book-scope summary { min-height: 44px; display: flex; align-items: center; }
+  body[data-view="reader"] .book-scope p { font-size: 13px; }
+  body[data-view="reader"] .question-card { scroll-margin-top: calc(var(--mobile-header-height, 108px) + 75px); }
+  body[data-view="reader"] .question-header { padding: 20px 17px 13px; }
+  body[data-view="reader"] .question-title { font-size: 18px; line-height: 1.65; }
+  body[data-view="reader"] .question-actions { justify-content: stretch; }
+  body[data-view="reader"] .question-actions .mark-button,
+  body[data-view="reader"] .question-actions .reviewed-button { flex: 1 1 0; min-height: 46px; font-size: 12px; }
+  body[data-view="reader"] .question-body { padding: 0 17px 22px; }
+  body[data-view="reader"] .question-number, body[data-view="reader"] .topic-chip,
+  body[data-view="reader"] .confidence-chip { font-size: 11px; }
+  body[data-view="reader"] .question-section-label { font-size: 11px; }
+  body[data-view="reader"] .question-body > .markdown,
+  body[data-view="reader"] .answer-content > .markdown { font-size: var(--reading-font-size, 1.0625rem); line-height: 1.95; }
+  body[data-view="reader"] .source-explanation .markdown { font-size: 13px; }
+  body[data-view="reader"] .source-links { font-size: 12px; }
+  body[data-view="reader"] .source-link { min-height: 44px; font-size: 12px; padding: 8px; }
+  body[data-view="reader"] .answer-details > summary { min-height: 48px; font-size: 14px; }
+  body[data-view="reader"] .answer-details > summary small { font-size: 11px; }
+  body[data-view="reader"] .notes-toggle { padding-inline: 17px; min-height: 56px; font-size: 14px; }
+  body[data-view="reader"] .notes-editor { padding: 0 17px 21px; }
+  body[data-view="reader"] .notes-textarea { min-height: 160px; padding: 12px; line-height: 1.8; }
+  body[data-view="reader"] .note-image-tools .button { min-height: 44px; font-size: 13px; }
+  body[data-view="reader"] .note-image-tools > span { font-size: 12px; line-height: 1.7; }
+  body[data-view="reader"] .notes-bottom, body[data-view="reader"] .save-status { font-size: 12px; }
+  body[data-view="reader"] .note-image-gallery .text-button { min-height: 44px; font-size: 12px; }
+  body[data-view="reader"] .note-image-gallery figcaption { font-size: 12px; }
+  body[data-view="reader"] .search-row { flex-direction: column; }
+  body[data-view="reader"] .chapter-select select { width: 100%; max-width: none; min-height: 48px; }
+  body[data-view="reader"] .search-box { min-height: 48px; }
+  body[data-view="reader"] .filter-row { align-items: stretch; flex-direction: column; }
+  body[data-view="reader"] .filter-tabs { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); width: 100%; }
+  body[data-view="reader"] .filter-tab { min-height: 44px; font-size: 13px; }
+  body[data-view="reader"] .bulk-fold-controls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  body[data-view="reader"] .bulk-fold-controls .button { min-height: 44px; font-size: 12px; padding-inline: 6px; }
+  body[data-view="reader"] .result-row { font-size: 12px; }
+  body[data-view="reader"] .reading-settings-trigger { min-height: 44px; font-size: 13px; }
+  .reading-size-options button { min-height: 44px; font-size: 14px; }
+  .campaign-reader-progress strong { font-size: 14px; }
+  #campaign-reader-label { font-size: 12px; }
+  .back-to-top { right: calc(16px + var(--safe-right)); bottom: calc(16px + var(--safe-bottom)); }
+  .toast { bottom: calc(16px + var(--safe-bottom)); max-width: calc(100vw - 32px); font-size: 13px; }
+
+  /* Native dialogs remain scrollable and every close control stays reachable. */
+  dialog { max-width: calc(100vw - 20px - var(--safe-left) - var(--safe-right)); max-height: calc(100dvh - 20px - var(--safe-top) - var(--safe-bottom)); }
+  dialog .dialog-heading, .campaign-dialog-heading { gap: 12px; }
+  dialog .dialog-heading .icon-button, .campaign-dialog-heading .icon-button { min-height: 44px; width: 44px; height: 44px; flex-shrink: 0; }
+  dialog.course-dialog {
+    width: calc(100vw - var(--safe-left)); max-width: none; height: 100vh; height: 100dvh; max-height: none;
+    padding: 0 calc(22px + var(--safe-right)) calc(26px + var(--safe-bottom)) 22px;
+  }
+  .course-dialog .dialog-heading { position: sticky; top: 0; background: #f1ece2; z-index: 3; padding: calc(20px + var(--safe-top)) 0 14px; margin-top: 0; }
+  .course-dialog .dialog-heading h2 { font-size: 36px; }
+  .course-dialog #add-subject-button { min-height: 44px; font-size: 12px; }
+  .course-dialog .subject-button.course-card .course-subtitle,
+  .course-dialog .subject-button.course-card .course-card-meta { font-size: 12px; }
+  dialog.source-dialog { width: calc(100vw - 20px - var(--safe-left) - var(--safe-right)); height: calc(100dvh - 20px - var(--safe-top) - var(--safe-bottom)); }
+  .source-dialog .dialog-heading { padding: 15px 15px 12px; }
+  .source-controls { flex-wrap: wrap; padding: 6px 10px; gap: 4px 8px; font-size: 12px; }
+  .source-controls .button { min-width: 44px; min-height: 44px; }
+  .source-images { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-x pan-y pinch-zoom; }
+  .source-image-item > a { font-size: 12px; min-height: 44px; display: flex; align-items: center; white-space: normal; }
+  dialog.help-dialog .dialog-heading, dialog.conflict-dialog .dialog-heading { position: sticky; top: 0; z-index: 2; }
+  .help-body p, .help-body .button { font-size: 14px; }
+  .help-draft-note { font-size: 12px; }
+  .dialog-actions .button { min-height: 44px; font-size: 12px; }
+  .conflict-versions pre { font-size: 13px; }
+  .conflict-check { min-height: 44px; font-size: 13px; }
+  dialog.campaign-dialog { width: calc(100vw - 20px - var(--safe-left) - var(--safe-right)); }
+  .campaign-dialog-heading { padding: 16px; }
+  .campaign-dialog-heading h2 { font-size: 32px; }
+  .campaign-dialog-heading p:last-child { font-size: 12px; }
+  .campaign-dialog-body { display: block; }
+  .campaign-chart { padding: 16px; }
+  .campaign-map-tools .button { min-width: 44px; min-height: 44px; font-size: 15px; }
+  #campaign-zoom-value, .campaign-chart-summary, #campaign-place-info { font-size: 12px; }
+  #campaign-map { max-height: none; }
+  .campaign-chronicle { border-left: 0; border-top: 1px solid #b29a7e50; max-height: none; overflow: visible; }
+  .campaign-milestones { display: block; }
+  .campaign-milestone h4 { font-size: 15px; }
+  .campaign-milestone-threshold, .campaign-map-note { font-size: 11px; }
+  .campaign-feedback { bottom: calc(12px + var(--safe-bottom)); right: calc(12px + var(--safe-right)); width: calc(100vw - 24px - var(--safe-left) - var(--safe-right)); flex-wrap: wrap; }
+  .campaign-feedback .icon-button { width: 44px; height: 44px; min-height: 44px; }
+  .campaign-feedback .text-button { min-height: 44px; font-size: 12px; }
+  .campaign-feedback p { font-size: 12px; }
+  body.mobile-keyboard-open .back-to-top, body.mobile-keyboard-open .campaign-feedback { display: none !important; }
+}
+
+/* A landscape phone keeps the cover's two anchors; browser chrome can shrink freely. */
+@media (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
+  body[data-view="home"] .topbar { flex-wrap: nowrap; padding-top: calc(8px + var(--safe-top)); min-height: 60px; }
+  body[data-view="home"] .brand-copy { max-width: 270px; }
+  body[data-view="home"] .top-actions { width: auto; }
+  .home-view.hero-home { min-height: 360px; }
+  .hero-bottom { bottom: calc(50px + var(--safe-bottom)); }
+  .hero-entry { width: 310px; max-width: 43%; }
+  .hero-entry .home-resume { grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
+  .hero-entry .home-resume p { display: none; }
+  .hero-baseline { bottom: calc(2px + var(--safe-bottom)); }
+  .campaign-preview { width: 215px; }
+  .campaign-mini-map { max-height: 98px; }
+  .campaign-preview h1 { font-size: 25px; }
+  .campaign-preview .campaign-mini-legend { display: none; }
+  body[data-view="reader"] .topbar { min-height: calc(64px + var(--safe-top)); flex-wrap: nowrap; }
+  body[data-view="reader"] .brand { max-width: 52%; }
+  body[data-view="reader"] .top-actions { width: auto; }
+}

@@ -1,0 +1,10 @@
+/* Keep one quiet line under the title, with stable space while quotes change. */
+.topbar{gap:16px}
+.brand{min-width:0;flex:1 1 auto}
+.brand-copy{display:block;width:260px;min-width:0;flex:0 1 auto}
+.brand small.quote-line{display:block;min-width:0;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.2px;line-height:1.6;opacity:1;transition:opacity .18s ease}
+.brand small.quote-line.is-changing{opacity:0}
+.top-actions{flex:0 0 auto}
+@media(max-width:780px){.topbar{gap:10px}.brand-copy{width:210px}.brand small.quote-line{font-size:9px;letter-spacing:0}}
+@media(max-width:430px){.topbar{gap:8px}.brand-copy{width:190px}.brand small.quote-line{display:block;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.brand small.quote-line{transition:none}}

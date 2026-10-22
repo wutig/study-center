@@ -1,0 +1,10 @@
+* text=auto eol=lf
+site/secrets/** -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.webp -text
+*.woff -text
+*.woff2 -text
+*.ttf -text
+*.pdf -text

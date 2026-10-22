@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f1ece2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="复习中心">
+  <title>复习中心</title>
+  <link rel="stylesheet" href="/study-center/vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="/study-center/assets/styles.css">
+  <link rel="stylesheet" href="/study-center/assets/poetry.css">
+  <link rel="stylesheet" href="/study-center/assets/apple-design.css">
+  <link rel="stylesheet" href="/study-center/assets/experience.css">
+  <link rel="stylesheet" href="/study-center/assets/navigation.css">
+  <link rel="stylesheet" href="/study-center/assets/theme.css">
+  <link rel="stylesheet" href="/study-center/assets/hero.css">
+  <link rel="stylesheet" href="/study-center/assets/campaign.css">
+  <link rel="stylesheet" href="/study-center/assets/reader-theme.css">
+  <link rel="stylesheet" href="/study-center/assets/mobile.css">
+  <link rel="manifest" href="/study-center/assets/manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="/study-center/assets/assets/icons/apple-touch-icon.png">
+  <script defer src="/study-center/bootstrap.js"></script>
+</head>
+<body data-view="home">
+  <header class="topbar">
+    <a class="brand" href="#/" aria-label="复习中心首页"><span class="brand-symbol" aria-hidden="true">阅</span><span class="brand-copy">复习中心<small id="brand-quote" class="quote-line" title="岳飞《满江红·写怀》；悬停可查看出处">莫等闲，白了少年头，空悲切！</small></span></a>
+    <div class="top-actions">
+      <button id="home-fullscreen-button" class="button button-quiet" type="button" aria-pressed="false"><span class="fullscreen-label">首页全屏</span></button>
+      <span id="global-save-status" class="global-save-status" aria-live="polite"><span class="status-dot"></span>本地记录</span>
+      <a id="backup-link" class="button button-quiet" href="/study-center/api/backup" download>备份记录</a>
+      <button id="restore-button" class="button button-quiet" type="button">恢复备份</button>
+      <button id="help-button" class="icon-button" type="button" aria-label="使用说明">?</button>
+    </div>
+  </header>
+
+  <div class="app-notice"><div id="error-banner" class="error-banner" role="alert" hidden></div></div>
+
+  <main id="home-view" class="home-view hero-home" tabindex="-1" aria-labelledby="home-title">
+    <div class="hero-art" aria-hidden="true">
+      <img class="hero-scene" src="/study-center/assets/assets/shaosong/hero-scene.png" alt="" fetchpriority="high">
+      <div class="hero-paper-wash"></div>
+      <div class="hero-marquee-wrap"><div id="hero-marquee" class="hero-marquee"></div></div>
+      <img class="hero-figure" src="/study-center/assets/assets/shaosong/hero-figure.png" alt="" fetchpriority="high">
+      <div class="hero-grain"></div>
+    </div>
+    <div class="hero-bottom">
+      <section class="campaign-preview" aria-labelledby="home-title">
+        <div class="campaign-preview-heading"><h1 id="home-title">山河复归</h1></div>
+        <button id="campaign-open" class="campaign-map-button" type="button" aria-haspopup="dialog" aria-controls="campaign-dialog" aria-label="放大收复地图，查看全科复习进度">
+          <svg id="campaign-mini-map" class="campaign-mini-map" viewBox="0 0 960 760" aria-hidden="true"></svg>
+          <span class="campaign-expand-hint">展开地图 <span aria-hidden="true">↗</span></span>
+        </button>
+        <div class="campaign-preview-status"><span><strong id="campaign-reviewed-count">0</strong> 题已复习</span><span id="campaign-next-milestone">从江南出发</span></div>
+        <p class="campaign-mini-legend"><span><i class="land-red"></i>已收复</span><span><i class="land-grey"></i>待收复</span></p>
+      </section>
+      <div class="hero-entry">
+        <button id="open-courses" class="hero-course-button" type="button" aria-haspopup="dialog" aria-controls="course-dialog" aria-expanded="false" aria-label="过河！过河！过河！打开课程选择">过河！过河！过河！</button>
+        <section id="home-resume" class="home-resume" aria-label="继续上次学习" hidden>
+          <div><span class="resume-kicker">继续上次的学习</span><h2 id="home-resume-title"></h2><p id="home-resume-detail"></p></div>
+          <button id="home-continue" class="button button-primary" type="button">继续学习 <span aria-hidden="true">→</span></button>
+        </section>
+      </div>
+    </div>
+    <div class="hero-baseline">
+      <button id="hero-motion-toggle" class="hero-motion-toggle" type="button" aria-pressed="false">暂停诗词 <span aria-hidden="true">Ⅱ</span></button>
+    </div>
+    <p id="home-message" class="hero-status" role="status">正在读取课程…</p>
+  </main>
+
+  <section id="reader-view" class="workspace reader-view" aria-label="课程复习" hidden>
+    <main id="main-content" class="main-content" tabindex="-1">
+      <nav class="route-bar" aria-label="阅读导航">
+        <button id="back-home" class="button button-quiet" type="button"><span aria-hidden="true">←</span> 全部课程</button>
+        <span id="route-context" class="route-context"></span>
+        <button id="fullscreen-button" class="button button-outline fullscreen-button" type="button" aria-pressed="false"><span class="fullscreen-icon" aria-hidden="true">⛶</span><span class="fullscreen-label">全屏学习</span></button>
+      </nav>
+      <section class="book-heading" aria-labelledby="book-title">
+        <p id="book-eyebrow" class="eyebrow">我的复习资料</p>
+        <div class="book-title-row"><h1 id="book-title">正在打开复习册</h1><a id="pdf-link" class="button button-outline" hidden target="_blank" rel="noopener">打开 PDF <span aria-hidden="true">↗</span></a></div>
+        <p id="book-subtitle" class="book-subtitle">标出还不会的题，写下自己的理解。</p>
+        <div class="book-meta"><span id="question-count" class="meta-stat"></span><span id="reviewed-count" class="meta-stat"></span><span id="marked-count" class="meta-stat"></span><span id="note-count" class="meta-stat"></span><span id="uncertain-count" class="meta-stat" hidden></span></div>
+        <details id="book-scope" class="book-scope" hidden><summary>资料范围与整理说明</summary><p id="book-scope-text"></p></details>
+      </section>
+
+      <button id="campaign-reader-open" class="campaign-reader-progress" type="button" aria-haspopup="dialog" aria-controls="campaign-dialog"><span class="campaign-reader-emblem" aria-hidden="true">复</span><span><strong>收复山河</strong><span id="campaign-reader-label">全科复习进度正在归档</span></span><span class="campaign-reader-meter" aria-hidden="true"><span id="campaign-reader-fill"></span></span><span aria-hidden="true">↗</span></button>
+
+      <div id="resume-banner" class="resume-banner" hidden><div><span class="resume-icon" aria-hidden="true">↳</span><span id="resume-label"></span></div><button id="resume-button" type="button">接着读 <span aria-hidden="true">→</span></button></div>
+
+      <section id="review-toolbar" class="review-toolbar" aria-label="题目筛选" hidden>
+        <div class="search-row"><label class="search-box"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="搜索题目、解答或自己的笔记" autocomplete="off" aria-label="搜索题目、解答或笔记"><kbd class="search-shortcut" aria-hidden="true">Ctrl K</kbd></label><label class="chapter-select"><span class="sr-only">筛选章节</span><select id="topic-select"><option value="">全部章节</option></select></label></div>
+        <div class="filter-row"><div id="filter-tabs" class="filter-tabs" role="group" aria-label="题目类型"><button class="filter-tab active" data-filter="all" type="button" aria-pressed="true">全部题目</button><button class="filter-tab" data-filter="marked" type="button" aria-pressed="false"><span class="small-flag" aria-hidden="true">⚑</span> 还不会 <span id="filter-marked-count" class="tab-count">0</span></button><button class="filter-tab" data-filter="notes" type="button" aria-pressed="false">有笔记</button><button class="filter-tab" data-filter="uncertain" type="button" aria-pressed="false">原题存疑</button></div><div class="bulk-fold-controls"><button id="toggle-all-answers" class="button button-outline" type="button">折叠全部答案</button><button id="toggle-all-notes" class="button button-outline" type="button">展开全部笔记</button><input id="hide-answers" type="checkbox" hidden></div></div>
+        <div class="result-row"><span id="result-label"></span><button id="refresh-filter" class="text-button" type="button" hidden>刷新筛选</button><button id="clear-filter" class="text-button" type="button" hidden>清除筛选</button><button id="reading-settings-trigger" class="button button-quiet reading-settings-trigger" type="button" popovertarget="reading-settings" aria-expanded="false" aria-label="阅读设置：调整文字大小"><span aria-hidden="true">Aa</span> 阅读设置</button></div>
+      </section>
+
+      <div id="question-list" class="question-list" aria-live="off"></div>
+      <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">✓</span><h2>这里暂时没有题目</h2><p id="empty-state-text"></p><button id="empty-reset-button" class="button button-outline" type="button">查看全部题目</button></div>
+      <div id="loading-state" class="loading-state"><span class="loading-line"></span><span class="loading-line"></span><span class="loading-line"></span></div>
+      <footer id="book-footer" class="book-footer" hidden>标记和笔记保存在当前浏览器。请定期备份，再更换手机或浏览器。<button id="footer-help" class="text-button" type="button">了解保存与备份</button></footer>
+    </main>
+  </section>
+
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="返回顶部" hidden>↑</button>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <input id="restore-file" type="file" accept=".zip,application/zip" hidden>
+
+  <dialog id="campaign-dialog" class="campaign-dialog" aria-labelledby="campaign-title" aria-describedby="campaign-description">
+    <div class="campaign-dialog-heading"><div><p class="campaign-kicker">你的复习，写成一卷北伐军报</p><h2 id="campaign-title">山河复归图</h2><p id="campaign-description">从江南出发，依全科已保存的复习进度连续收复山河。</p></div><button id="campaign-close" class="icon-button" type="button" aria-label="关闭收复地图">×</button></div>
+    <div class="campaign-dialog-body">
+      <section class="campaign-chart" aria-label="收复地图">
+        <div class="campaign-chart-summary"><span><strong id="campaign-large-count">0</strong> 题已复习</span><span id="campaign-territory-count">收复 0.0%</span></div>
+        <div class="campaign-map-tools" role="group" aria-label="地图缩放">
+          <button id="campaign-zoom-out" class="button button-quiet" type="button" aria-label="缩小地图">−</button>
+          <span id="campaign-zoom-value" aria-live="polite">100%</span>
+          <button id="campaign-zoom-in" class="button button-quiet" type="button" aria-label="放大地图">＋</button>
+          <button id="campaign-zoom-reset" class="button button-quiet" type="button">复位</button>
+        </div>
+        <svg id="campaign-map" viewBox="0 0 960 760" role="img" aria-label="全科复习收复示意地图"></svg>
+        <p id="campaign-place-info" role="status">放大地图，查看各地治所</p>
+        <div class="campaign-chart-caption"><div class="campaign-mini-legend"><span><i class="land-red"></i>起始疆土与已收复</span><span><i class="land-grey"></i>待收复</span></div><p id="campaign-pending-status" role="status"></p></div>
+        <p class="campaign-map-note">按全科已保存的复习进度连续收复；地名与位置基于 1080 年历史治所，地图分区为复习示意，并非历史疆界。<a id="campaign-source-link" href="/study-center/assets/assets/campaign/路线与彩蛋说明.html" target="_blank" rel="noopener">地名与军报出处 ↗</a></p>
+      </section>
+      <aside class="campaign-chronicle" aria-labelledby="campaign-chronicle-title"><div class="campaign-chronicle-heading"><h3 id="campaign-chronicle-title">北伐军报</h3></div><ol id="campaign-milestones" class="campaign-milestones"></ol></aside>
+    </div>
+  </dialog>
+  <div id="campaign-feedback" class="campaign-feedback" role="status" hidden><span id="campaign-feedback-seal" class="campaign-feedback-seal" aria-hidden="true">捷</span><div><strong id="campaign-feedback-title"></strong><p id="campaign-feedback-text"></p></div><button id="campaign-feedback-open" class="text-button" type="button">看军报 ↗</button><button id="campaign-feedback-close" class="icon-button" type="button" aria-label="关闭收复提示">×</button></div>
+
+  <dialog id="course-dialog" class="course-dialog" aria-labelledby="course-dialog-title">
+    <div class="dialog-heading">
+      <div><h2 id="course-dialog-title">选一卷，静心读。</h2></div>
+      <button id="close-courses" class="icon-button" type="button" aria-label="关闭课程选择">×</button>
+    </div>
+    <div class="home-section-heading"><h3>我的课程</h3><button id="add-subject-button" class="button button-quiet" type="button">＋ 添加学习资料</button></div>
+    <nav id="subject-list" class="subject-list course-grid" aria-label="选择课程"></nav>
+  </dialog>
+
+  <div id="reading-settings" class="reading-settings-popover" popover="auto" role="dialog" aria-modal="false" aria-labelledby="reading-settings-title">
+    <h2 id="reading-settings-title">阅读设置</h2>
+    <p>选择适合自己的文字大小</p>
+    <div class="reading-size-options" role="group" aria-label="题目文字大小"><button type="button" data-reading-size="standard" aria-pressed="true">标准</button><button type="button" data-reading-size="large" aria-pressed="false">稍大</button><button type="button" data-reading-size="largest" aria-pressed="false">更大</button></div>
+    <small>自动记住，下次打开继续使用。</small>
+  </div>
+
+  <dialog id="source-dialog" class="source-dialog" aria-labelledby="source-title">
+    <div class="dialog-heading"><div><p class="eyebrow">保留原题，方便核对</p><h2 id="source-title">题目原图</h2></div><button class="icon-button dialog-close" type="button" aria-label="关闭原图">×</button></div>
+    <div class="source-controls"><div><button id="zoom-out" class="button button-quiet" type="button" aria-label="缩小原图">−</button><span id="zoom-label">适合宽度</span><button id="zoom-in" class="button button-quiet" type="button" aria-label="放大原图">＋</button></div><button id="zoom-fit" class="text-button" type="button">适合宽度</button><span class="muted">可滚动查看完整原图</span></div>
+    <div id="source-images" class="source-images"></div>
+  </dialog>
+
+  <dialog id="conflict-dialog" class="conflict-dialog" aria-labelledby="conflict-title">
+    <div class="dialog-heading"><div><p class="eyebrow">两份记录都已保留</p><h2 id="conflict-title">这道题的笔记在别处改过</h2></div><button class="icon-button dialog-close" type="button" aria-label="暂时关闭冲突处理">×</button></div>
+    <p class="dialog-description">可能来自另一个窗口或恢复的备份。请核对后选择保存哪一份；关闭此窗口会继续保留本页草稿。</p>
+    <div class="conflict-versions"><section><h3>本页草稿 <span id="conflict-local-mark"></span></h3><pre id="conflict-local-notes"></pre></section><section><h3>浏览器中的记录 <span id="conflict-remote-mark"></span></h3><pre id="conflict-remote-notes"></pre></section></div>
+    <label class="conflict-editor-label" for="conflict-merged-notes">合并后的笔记 <small>可以直接修改，再保存</small></label><textarea id="conflict-merged-notes" rows="7"></textarea><div class="conflict-flag-options"><label class="conflict-check"><input id="conflict-merged-mark" type="checkbox"> 这道题仍然还不会</label><label class="conflict-check"><input id="conflict-merged-reviewed" type="checkbox"> 本轮已复习</label></div>
+    <div class="dialog-actions conflict-actions"><button id="conflict-use-remote" class="button button-quiet" type="button">采用磁盘记录</button><button id="conflict-use-local" class="button button-outline" type="button">保存本页版本</button><button id="conflict-merge" class="button button-primary" type="button">保存合并结果</button></div>
+  </dialog>
+
+  <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title">
+    <div class="dialog-heading"><div><p class="eyebrow">让复习留下痕迹</p><h2 id="help-title">怎么使用复习中心</h2></div><button class="icon-button dialog-close" type="button" aria-label="关闭使用说明">×</button></div>
+    <div class="help-body"><section><h3>手机与电脑都能复习</h3><p>点击「过河！过河！过河！」选择课程。每题可标记「还不会」「本轮已复习」，并单独或批量展开答案、笔记。</p><p>第一次在 iPhone 使用时，建议先添加到主屏幕，再从主屏幕开始记录。添加前，点下方「复制私有链接」，然后在 Safari 分享菜单选择「添加到主屏幕」。若新入口要求解锁，粘贴刚才复制的私有链接即可。</p></section><section><h3>笔记保存在当前浏览器</h3><p>文字、标记与图片保存在这台设备的当前浏览器中。确认显示「已保存」再关闭。手机、电脑、Safari 和主屏幕入口的记录不会自动同步。</p><p>添加截图请展开笔记，点「添加图片」并选择照片。也可以在输入框中粘贴图片。</p></section><section><h3>备份与迁移</h3><p>定期点「备份记录」下载 ZIP。换设备或浏览器后，用「恢复备份」导入；已有不同记录会保留并提示冲突。清除浏览器网站数据会删除本地记录，因此请先备份。此备份只含个人记录与图片，不含原来的电脑程序。</p></section><section><h3>缓存后离线复习</h3><p>已打开的资料会保存在本机缓存中。需要离线查看全部原图和 PDF，可联网时点击下面的按钮，等待下载完成。系统仍可能回收缓存；长期记录请另存备份。</p><button id="site-offline-download" class="button button-outline" type="button">下载全部资料供离线复习</button><p id="site-offline-status" role="status"></p></section><section><h3>私有链接与解锁</h3><p>题库以密文发布，私有链接含解锁密钥。请保留自己的完整链接。换浏览器或清除网站数据后，粘贴私有链接即可重新解锁。</p><button id="site-copy-private-link" class="button button-outline" type="button">复制私有链接</button><p id="site-copy-status" role="status"></p><textarea id="site-private-link-fallback" readonly hidden rows="3" aria-label="私有链接，长按可复制" style="width:100%;font-size:16px;padding:12px"></textarea><button id="site-show-unlock" class="button button-outline" type="button">重新输入私有链接</button></section></div><p class="help-draft-note">未保存草稿与已保存记录都位于当前浏览器；请定期下载备份。</p>
+  </dialog>
+</body>
+</html>
