@@ -1,5 +1,6 @@
 """Create the owner's local QR entry. It is always outside the published tree."""
 from pathlib import Path
+import argparse
 import html
 import json
 import re
@@ -11,12 +12,15 @@ PUBLIC_URL = 'https://wutig.github.io/study-center/'
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--tablet', action='store_true', help='Create the Android tablet entry instead of the phone entry.')
+    args = parser.parse_args()
     key = (PRIVATE / 'key.txt').read_text(encoding='utf-8').strip()
     if not re.fullmatch(r'[A-Za-z0-9_-]{43}', key):
         raise ValueError('Expected a private 256-bit access key.')
     sys.path.insert(0, str(ROOT.parent / '复习中心' / 'vendor' / 'qrcode'))
     from qrcodegen import QrCode
-    private_url = PUBLIC_URL + '#key=' + key
+    private_url = PUBLIC_URL + ('?layout=tablet' if args.tablet else '') + '#key=' + key
     qr = QrCode.encode_text(private_url, QrCode.Ecc.MEDIUM)
     size = qr.get_size()
     cells = ' '.join(f'M{x+4},{y+4}h1v1h-1z' for y in range(size) for x in range(size) if qr.get_module(x, y))
@@ -42,10 +46,19 @@ textarea{width:100%;font:14px/1.6 monospace;resize:vertical;padding:10px;border:
 <textarea id="private-link" rows="3" readonly>__URL__</textarea><button onclick="document.getElementById('private-link').select();document.execCommand('copy');this.textContent='已复制链接'">复制完整链接</button>
 <p>需要带上原电脑笔记：把旁边的 <a href="电脑笔记迁移.zip">电脑笔记迁移.zip</a> 发到手机，在网站点“恢复备份”导入。它仅在你的电脑上，不在公开仓库。</p>
 <p>Safari 与主屏幕 App、不同设备不会自动同步；换入口前请先备份。勿使用无痕浏览保存长期笔记。</p></details></main></html>'''
+    if args.tablet:
+        page = (page.replace('用手机随时复习', 'vivo Pad5 平板复习')
+                .replace('iPhone 打开 VPN', '平板打开 VPN')
+                .replace('<strong>Safari</strong>', '<strong>Chrome 或 Edge</strong>')
+                .replace('通过分享菜单<strong>添加到主屏幕</strong>', '在浏览器菜单选择<strong>添加到主屏幕或安装应用</strong>')
+                .replace('手机笔记保存在当前浏览器', '平板笔记保存在当前浏览器')
+                .replace('Safari 与主屏幕 App、不同设备不会自动同步', '不同浏览器与不同设备的记录不会自动同步')
+                .replace('发到手机', '发到平板'))
     PRIVATE.mkdir(exist_ok=True)
-    (PRIVATE / '手机公网入口.html').write_text(page.replace('__QR__', svg).replace('__URL__', html.escape(private_url)), encoding='utf-8')
-    (PRIVATE / '公网复习中心.url').write_text('[InternetShortcut]\nURL=' + private_url + '\n', encoding='utf-8')
-    print(json.dumps({'entry': str(PRIVATE / '手机公网入口.html'), 'public_url': PUBLIC_URL}, ensure_ascii=True))
+    entry = PRIVATE / ('vivoPad5平板入口.html' if args.tablet else '手机公网入口.html')
+    entry.write_text(page.replace('__QR__', svg).replace('__URL__', html.escape(private_url)), encoding='utf-8')
+    (PRIVATE / ('平板复习中心.url' if args.tablet else '公网复习中心.url')).write_text('[InternetShortcut]\nURL=' + private_url + '\n', encoding='utf-8')
+    print(json.dumps({'entry': str(entry), 'public_url': PUBLIC_URL}, ensure_ascii=True))
 
 
 if __name__ == '__main__':

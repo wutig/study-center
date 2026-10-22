@@ -1,0 +1,242 @@
+/* A paper reading desk for Android tablets. All changes opt in through tablet.js. */
+html.review-tablet { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--tablet-header-height, 80px) + 88px); }
+html.review-tablet body { overflow-x: clip; }
+.tablet-outline, .tablet-outline-toggle, .tablet-outline-dialog { display: none; }
+html.review-tablet :is(button, .button, .text-button, summary) { touch-action: manipulation; }
+html.review-tablet :is(.button, .icon-button, .text-button, .filter-tab, .source-link, .mark-button, .reviewed-button, .back-to-top) { min-height: 48px; min-width: 48px; }
+html.review-tablet :is(.icon-button, .back-to-top) { width: 48px; height: 48px; flex-shrink: 0; }
+html.review-tablet :is(input:not([type="checkbox"]):not([type="file"]), textarea, select) { font-size: 16px; }
+html.review-tablet .top-actions { gap: 8px; }
+html.review-tablet .top-actions .button { padding: 10px 13px; font-size: 13px; }
+html.review-tablet .top-actions .icon-button { width: 48px; height: 48px; }
+html.review-tablet .brand-copy { font-size: 20px; }
+html.review-tablet .brand small.quote-line { font-size: 12px; }
+html.review-tablet .search-shortcut { display: none; }
+
+/* The cover keeps its original illustration and one unmistakable entry point. */
+html.review-tablet body[data-view="home"] .topbar { min-height: 88px; height: auto; padding: calc(20px + var(--safe-top)) max(30px, var(--safe-right)) 10px max(30px, var(--safe-left)); flex-wrap: nowrap; gap: 22px; }
+html.review-tablet body[data-view="home"] .top-actions { width: auto; flex-shrink: 0; }
+html.review-tablet body[data-view="home"] .brand { min-height: 48px; }
+html.review-tablet .home-view.hero-home { min-height: 620px; height: 100dvh; }
+html.review-tablet .hero-bottom { inset-inline: clamp(30px, 4vw, 64px); bottom: calc(92px + var(--safe-bottom)); gap: 48px; }
+html.review-tablet .hero-entry { width: 340px; max-width: 38%; }
+html.review-tablet .hero-course-button { min-height: 64px; padding: 17px 18px; font-size: 17px; letter-spacing: .08em; }
+html.review-tablet .hero-entry .home-resume { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; margin-top: 22px; padding-top: 16px; }
+html.review-tablet .hero-entry .home-resume h2 { font-size: 17px; }
+html.review-tablet .hero-entry .home-resume p, html.review-tablet .hero-entry .resume-kicker { font-size: 12px; }
+html.review-tablet .hero-entry .home-resume .button { min-height: 48px; font-size: 13px; padding-inline: 8px 0; }
+html.review-tablet .hero-baseline { inset-inline: clamp(30px, 4vw, 64px); bottom: calc(20px + var(--safe-bottom)); }
+html.review-tablet #hero-motion-toggle { min-height: 48px; padding-inline: 10px; font-size: 12px; }
+html.review-tablet .campaign-preview { width: clamp(250px, 24vw, 335px); }
+html.review-tablet .campaign-preview-status, html.review-tablet .campaign-mini-legend, html.review-tablet .campaign-expand-hint { font-size: 12px; }
+html.review-tablet .campaign-mini-map { max-height: 225px; }
+
+/* The page remains a single folio; the side rail is navigation, never a second answer column. */
+html.review-tablet body[data-view="reader"] .topbar { min-height: 80px; height: auto; padding: calc(12px + var(--safe-top)) 28px 12px; gap: 18px; flex-wrap: nowrap; }
+html.review-tablet body[data-view="reader"] .brand { max-width: 48%; min-height: 48px; }
+html.review-tablet body[data-view="reader"] .brand-copy { width: auto; max-width: 100%; }
+html.review-tablet body[data-view="reader"] .brand small.quote-line { font-size: 12px; }
+html.review-tablet body[data-view="reader"] .top-actions { width: auto; margin-left: auto; }
+html.review-tablet body[data-view="reader"] .reader-view .main-content { max-width: 940px; padding: 0 30px calc(60px + var(--safe-bottom)); }
+html.review-tablet body[data-view="reader"] .route-bar { top: var(--tablet-header-height, 80px); min-height: 72px; margin: 0 0 26px; padding: 10px 0; gap: 12px; }
+html.review-tablet body[data-view="reader"] .route-bar .button { min-height: 48px; font-size: 14px; padding: 10px 12px; }
+html.review-tablet body[data-view="reader"] .route-bar #back-home { margin-left: 0; }
+html.review-tablet body[data-view="reader"] .route-context { font-size: 13px; letter-spacing: 0; }
+html.review-tablet body[data-view="reader"] .route-bar #fullscreen-button { margin-left: auto; }
+html.review-tablet body[data-view="reader"] :is(.question-card, .book-heading) { scroll-margin-top: calc(var(--tablet-header-height, 80px) + 88px); }
+html.review-tablet body[data-view="reader"] .book-heading { padding: 30px 32px; }
+html.review-tablet body[data-view="reader"] .book-title-row h1 { font-size: clamp(38px, 3.8vw, 49px); }
+html.review-tablet body[data-view="reader"] .book-subtitle { font-size: 15px; line-height: 1.9; }
+html.review-tablet body[data-view="reader"] .book-meta { font-size: 13px; gap: 10px 22px; }
+html.review-tablet body[data-view="reader"] .book-scope { max-width: 100%; font-size: 14px; }
+html.review-tablet body[data-view="reader"] .book-scope > summary { min-height: 48px; display: flex; align-items: center; }
+html.review-tablet body[data-view="reader"] .review-toolbar { margin-top: 28px; }
+html.review-tablet body[data-view="reader"] .search-row { flex-direction: row; gap: 12px; }
+html.review-tablet body[data-view="reader"] .search-box { min-height: 52px; }
+html.review-tablet body[data-view="reader"] .search-box input { font-size: 16px; min-height: 48px; }
+html.review-tablet body[data-view="reader"] .chapter-select select { min-height: 52px; max-width: 230px; width: 100%; font-size: 15px; padding-inline: 14px 30px; }
+html.review-tablet body[data-view="reader"] .filter-row { flex-direction: column; align-items: stretch; gap: 12px; }
+html.review-tablet body[data-view="reader"] .filter-tabs { display: flex; width: fit-content; max-width: 100%; flex-wrap: wrap; gap: 5px; }
+html.review-tablet body[data-view="reader"] .filter-tab { min-height: 48px; font-size: 14px; padding: 10px 17px; }
+html.review-tablet body[data-view="reader"] .bulk-fold-controls { display: flex; gap: 10px; }
+html.review-tablet body[data-view="reader"] .bulk-fold-controls .button { flex: 1 1 0; min-height: 48px; font-size: 14px; padding-inline: 12px; }
+html.review-tablet body[data-view="reader"] .result-row { font-size: 13px; }
+html.review-tablet body[data-view="reader"] .reading-settings-trigger { font-size: 14px; min-height: 48px; }
+html.review-tablet body[data-view="reader"] .question-list { gap: 32px; }
+html.review-tablet body[data-view="reader"] .question-header { padding: 28px 32px 20px; gap: 20px; }
+html.review-tablet body[data-view="reader"] .question-title { font-size: 21px; line-height: 1.65; }
+html.review-tablet body[data-view="reader"] :is(.question-number, .topic-chip, .confidence-chip, .question-section-label) { font-size: 12px; }
+html.review-tablet body[data-view="reader"] .question-labels { gap: 8px; margin-bottom: 14px; }
+html.review-tablet body[data-view="reader"] .question-actions { gap: 10px; }
+html.review-tablet body[data-view="reader"] :is(.mark-button, .reviewed-button) { min-width: 132px; min-height: 48px; font-size: 13px; padding: 10px 12px; }
+html.review-tablet body[data-view="reader"] .question-body { padding: 0 32px 28px; }
+html.review-tablet body[data-view="reader"] :is(.question-body > .markdown, .answer-content > .markdown) { font-size: max(18px, var(--reading-font-size, 18px)); line-height: 1.95; overflow-wrap: anywhere; }
+html.review-tablet body[data-view="reader"] .followup .markdown { font-size: max(17px, calc(var(--reading-font-size, 18px) * .94)); }
+html.review-tablet body[data-view="reader"] .source-links { gap: 10px; font-size: 13px; }
+html.review-tablet body[data-view="reader"] .source-link { min-height: 48px; font-size: 14px; padding: 10px 14px; }
+html.review-tablet body[data-view="reader"] .source-explanation .markdown { font-size: 15px; }
+html.review-tablet body[data-view="reader"] .answer-details > summary { min-height: 56px; font-size: 16px; gap: 10px; }
+html.review-tablet body[data-view="reader"] .answer-details > summary small { font-size: 12px; }
+html.review-tablet body[data-view="reader"] .notes-toggle { min-height: 64px; padding: 18px 32px; font-size: 16px; }
+html.review-tablet body[data-view="reader"] .notes-editor { padding: 0 32px 28px; }
+html.review-tablet body[data-view="reader"] .notes-textarea { min-height: 190px; font-size: 17px; line-height: 1.9; padding: 16px; scroll-margin-block: calc(var(--tablet-header-height, 80px) + 88px) 28px; }
+html.review-tablet body[data-view="reader"] .note-image-tools { gap: 12px; margin-top: 14px; }
+html.review-tablet body[data-view="reader"] .note-image-tools .button { min-height: 48px; font-size: 14px; padding-inline: 18px; }
+html.review-tablet body[data-view="reader"] :is(.note-image-tools > span, .notes-bottom, .save-status, .note-image-gallery figcaption) { font-size: 13px; }
+html.review-tablet body[data-view="reader"] .note-image-gallery .text-button { min-height: 48px; font-size: 13px; }
+html.review-tablet .reading-size-options button { min-height: 48px; font-size: 15px; }
+html.review-tablet .back-to-top { right: calc(24px + var(--safe-right)); bottom: calc(24px + var(--safe-bottom)); }
+
+/* One directory moves into a native modal drawer when a split window gets narrow. */
+html.review-tablet .tablet-outline-toggle { display: inline-flex; gap: 8px; color: #87372d; }
+html.review-tablet .tablet-outline { display: flex; flex-direction: column; min-height: 0; background: #f5eee2; color: #513c2e; border: 1px solid #d0bfa9; border-radius: 5px; }
+html.review-tablet .tablet-outline-heading { display: flex; align-items: center; justify-content: space-between; padding: 17px 18px 12px; gap: 12px; }
+html.review-tablet .tablet-outline-heading h2 { font-size: 15px; font-weight: 650; letter-spacing: .08em; }
+html.review-tablet .tablet-outline-heading .icon-button { border-color: #d0bfa9; color: #8c3b2d; font: 28px/1 sans-serif; }
+html.review-tablet .tablet-course-heading { padding: 0 18px 15px; border-bottom: 1px solid #d8c9b6; }
+html.review-tablet .tablet-course-heading strong { display: block; margin-bottom: 12px; font-size: 18px; line-height: 1.65; font-weight: 600; }
+html.review-tablet #tablet-switch-course { width: 100%; justify-content: space-between; min-height: 48px; background: #fffbf2; border-color: #c6ac91; color: #8e3b2b; font-size: 14px; }
+html.review-tablet .tablet-outline-position { padding: 13px 18px 10px; font-size: 12px; color: #89705b; font-variant-numeric: tabular-nums; }
+html.review-tablet .tablet-outline-list { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 9px 14px; scrollbar-width: thin; scrollbar-color: #bda18b transparent; }
+html.review-tablet .tablet-question-link { position: relative; width: 100%; min-height: 72px; border: 1px solid transparent; border-radius: 4px; padding: 12px 28px 12px 13px; display: flex; align-items: flex-start; flex-direction: column; gap: 4px; text-align: left; background: transparent; color: #654e3e; }
+html.review-tablet .tablet-question-number { font-size: 11px; color: #8d7761; line-height: 1.5; }
+html.review-tablet .tablet-question-copy { font-size: 14px; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+html.review-tablet .tablet-question-mark { position: absolute; right: 9px; top: 13px; font-size: 15px; color: #9c302c; }
+html.review-tablet .tablet-question-link:hover { background: #e9ddcc; }
+html.review-tablet .tablet-question-link[aria-current="location"] { background: #fffaf1; border-color: #d2b69a; box-shadow: inset 3px 0 #9c302c; color: #863227; }
+html.review-tablet .tablet-question-link[aria-current="location"] .tablet-question-number { color: #9c302c; }
+html.review-tablet .tablet-question-link:focus-visible { outline: 3px solid #9c302c80; outline-offset: -3px; }
+html.review-tablet .tablet-outline-empty { padding: 20px 12px; font-size: 14px; color: #856b55; }
+html.review-tablet dialog.tablet-outline-dialog { display: none; width: min(390px, calc(100vw - 28px)); height: calc(100dvh - 28px - var(--safe-top) - var(--safe-bottom)); max-height: none; max-width: none; position: fixed; inset: calc(14px + var(--safe-top)) auto auto calc(14px + var(--safe-left)); margin: 0; padding: 0; border: 0; border-radius: 6px; overflow: hidden; background: #f5eee2; box-shadow: 12px 0 48px #291c1b30; }
+html.review-tablet dialog.tablet-outline-dialog[open] { display: flex; }
+html.review-tablet dialog.tablet-outline-dialog::backdrop { background: #261b1859; }
+html.review-tablet .tablet-outline-dialog .tablet-outline { width: 100%; height: 100%; border: 0; }
+html.review-tablet body[data-view="home"] > .tablet-outline-dialog { display: none; }
+
+/* Dialogs use the tablet's area while keeping comfortable margins and a fixed way out. */
+html.review-tablet dialog { max-height: calc(100dvh - 40px - var(--safe-top) - var(--safe-bottom)); max-width: calc(100vw - 48px); }
+html.review-tablet dialog .dialog-heading, html.review-tablet .campaign-dialog-heading { position: sticky; top: 0; z-index: 3; }
+html.review-tablet dialog .dialog-heading .icon-button, html.review-tablet .campaign-dialog-heading .icon-button { min-height: 48px; width: 48px; height: 48px; }
+html.review-tablet dialog.course-dialog { inset: 20px 24px 20px auto; width: min(820px, calc(100vw - 48px)); height: calc(100dvh - 40px); max-height: none; padding: 0 30px 28px; border: 1px solid #b89e82; border-radius: 5px; }
+html.review-tablet .course-dialog .dialog-heading { padding: 25px 0 20px; margin-top: 0; background: #f1ece2; }
+html.review-tablet .course-dialog .dialog-heading h2 { font-size: 40px; }
+html.review-tablet .course-dialog #close-courses { width: 48px; height: 48px; }
+html.review-tablet .course-dialog .home-section-heading { margin-top: 8px; }
+html.review-tablet .course-dialog .subject-list.course-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+html.review-tablet .course-dialog .subject-button.course-card { min-height: 172px; padding: 27px 20px 24px 34px; }
+html.review-tablet .course-dialog .subject-button.course-card strong { font-size: 21px; }
+html.review-tablet .course-dialog .subject-button.course-card :is(.course-subtitle, .course-card-meta) { font-size: 12px; }
+html.review-tablet .course-dialog .subject-button.course-card::before { font-size: 12px; }
+html.review-tablet .course-dialog #add-subject-button { min-height: 48px; font-size: 13px; }
+html.review-tablet dialog.source-dialog { width: min(1100px, calc(100vw - 48px)); height: calc(100dvh - 40px); }
+html.review-tablet .source-controls { gap: 10px; flex-wrap: wrap; }
+html.review-tablet .source-controls :is(.button, .text-button) { min-width: 48px; min-height: 48px; font-size: 14px; }
+html.review-tablet .source-images { touch-action: pan-x pan-y pinch-zoom; overscroll-behavior: contain; }
+html.review-tablet .source-image-item > a { min-height: 48px; display: flex; align-items: center; font-size: 14px; }
+html.review-tablet .help-body p { font-size: 16px; }
+html.review-tablet .help-body .button { font-size: 14px; }
+html.review-tablet .conflict-versions pre { font-size: 14px; }
+html.review-tablet .conflict-check { min-height: 48px; }
+html.review-tablet .campaign-dialog { width: min(1160px, calc(100vw - 48px)); }
+html.review-tablet .campaign-map-tools .button { min-height: 48px; min-width: 48px; font-size: 17px; }
+html.review-tablet .campaign-reader-progress strong { font-size: 16px; }
+html.review-tablet #campaign-reader-label { font-size: 13px; }
+html.review-tablet .campaign-feedback .text-button { min-height: 48px; font-size: 14px; }
+html.review-tablet .toast { max-width: calc(100vw - 48px); font-size: 15px; bottom: calc(24px + var(--safe-bottom)); }
+html.review-tablet.tablet-keyboard-open :is(.back-to-top, .campaign-feedback) { display: none !important; }
+html.review-tablet.tablet-keyboard-open body[data-view="reader"] .route-bar { position: relative; top: auto; }
+html.review-tablet.tablet-keyboard-open body[data-view="reader"] .topbar { position: relative; }
+
+@media (min-width: 1100px) and (orientation: landscape) {
+  html.review-tablet body[data-view="reader"] .reader-view { max-width: 1320px; margin-inline: auto; padding-left: 292px; }
+  html.review-tablet body[data-view="reader"] .reader-view .main-content { max-width: 940px; padding-inline: 22px; }
+  html.review-tablet body[data-view="reader"] > .reader-view > .tablet-outline { position: fixed; z-index: 16; top: calc(var(--tablet-header-height, 80px) + 18px); bottom: calc(20px + var(--safe-bottom)); left: max(22px, calc((100vw - 1320px) / 2 + 12px)); width: 256px; }
+  html.review-tablet .tablet-outline-toggle, html.review-tablet #tablet-outline-close { display: none; }
+  html.review-tablet body[data-view="reader"] .route-context { display: block; }
+  html.review-tablet body[data-view="reader"].is-immersive .route-bar,
+  html.review-tablet body[data-view="reader"].is-fullscreen .route-bar { top: 0; }
+}
+@media (max-width: 1099px), (orientation: portrait) {
+  html.review-tablet body[data-view="reader"] .route-context { display: none; }
+  html.review-tablet .hero-entry { max-width: 44%; width: 335px; }
+  html.review-tablet .hero-entry .home-resume { grid-template-columns: 1fr; gap: 4px; }
+  html.review-tablet .hero-entry .home-resume .button { justify-content: flex-start; }
+  html.review-tablet .hero-marquee { font-size: clamp(160px, 22vw, 240px); }
+  html.review-tablet .hero-marquee-wrap { top: 23%; }
+  html.review-tablet .hero-scene, html.review-tablet .hero-figure { object-position: 52% 43%; }
+}
+@media (max-width: 760px) {
+  html.review-tablet body[data-view="home"] .topbar { padding: calc(16px + var(--safe-top)) 20px 8px; flex-wrap: wrap; gap: 6px; min-height: 120px; }
+  html.review-tablet body[data-view="home"] .top-actions { width: 100%; justify-content: flex-end; gap: 6px; }
+  html.review-tablet body[data-view="reader"] .topbar { padding: calc(10px + var(--safe-top)) 18px 8px; flex-wrap: wrap; gap: 5px; }
+  html.review-tablet body[data-view="reader"] .brand { max-width: 100%; }
+  html.review-tablet body[data-view="reader"] .top-actions { width: 100%; justify-content: flex-end; gap: 6px; }
+  html.review-tablet .top-actions .button { padding-inline: 9px; font-size: 13px; }
+  html.review-tablet body[data-view="reader"] .reader-view .main-content { padding-inline: 20px; }
+  html.review-tablet body[data-view="reader"] .route-bar { gap: 8px; }
+  html.review-tablet body[data-view="reader"] .route-bar .button { font-size: 13px; padding-inline: 10px; }
+  html.review-tablet body[data-view="reader"] .book-heading { padding: 25px; }
+  html.review-tablet body[data-view="reader"] .book-title-row { flex-wrap: wrap; }
+  html.review-tablet body[data-view="reader"] .book-subtitle { max-width: 100%; }
+  html.review-tablet body[data-view="reader"] .search-row { flex-direction: column; }
+  html.review-tablet body[data-view="reader"] .chapter-select select { max-width: none; }
+  html.review-tablet body[data-view="reader"] .question-header { padding: 25px 24px 18px; display: block; }
+  html.review-tablet body[data-view="reader"] .question-actions { flex-direction: row; padding-top: 16px; }
+  html.review-tablet body[data-view="reader"] :is(.mark-button, .reviewed-button) { flex: 1 1 0; min-width: 0; }
+  html.review-tablet body[data-view="reader"] .question-body { padding: 0 24px 26px; }
+  html.review-tablet body[data-view="reader"] .notes-toggle { padding-inline: 24px; }
+  html.review-tablet body[data-view="reader"] .notes-editor { padding-inline: 24px; }
+  html.review-tablet body[data-view="reader"] .filter-tabs { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html.review-tablet .hero-bottom { inset-inline: 25px; gap: 24px; }
+  html.review-tablet .hero-entry { max-width: 47%; }
+  html.review-tablet .hero-course-button { font-size: 14px; padding-inline: 9px; }
+  html.review-tablet .campaign-preview { width: 43%; }
+  html.review-tablet .campaign-mini-map { max-height: 185px; }
+  html.review-tablet .hero-baseline { inset-inline: 25px; }
+  html.review-tablet .campaign-preview-status { flex-wrap: wrap; }
+  html.review-tablet .campaign-dialog-body { display: block; }
+  html.review-tablet .campaign-chronicle { border-left: 0; border-top: 1px solid #b29a7e50; max-height: none; overflow: visible; }
+}
+@media (max-width: 699px) {
+  html.review-tablet .course-dialog .subject-list.course-grid { grid-template-columns: 1fr; }
+  html.review-tablet .course-dialog .subject-button.course-card { min-height: 150px; }
+  html.review-tablet dialog.course-dialog { width: calc(100vw - 24px); inset: 12px 12px 12px auto; height: calc(100dvh - 24px); padding-inline: 24px; }
+  html.review-tablet .course-dialog .dialog-heading h2 { font-size: 34px; }
+  html.review-tablet .hero-entry .home-resume h2 { font-size: 15px; }
+  html.review-tablet .hero-entry .home-resume p { font-size: 11px; }
+}
+@media (max-width: 480px) {
+  html.review-tablet .brand-copy { font-size: 18px; }
+  html.review-tablet .top-actions { gap: 3px; }
+  html.review-tablet .top-actions .button { font-size: 12px; padding-inline: 7px; }
+  html.review-tablet body[data-view="reader"] .reader-view .main-content { padding-inline: 12px; }
+  html.review-tablet body[data-view="reader"] .route-bar .button { font-size: 12px; padding-inline: 8px; gap: 6px; }
+  html.review-tablet body[data-view="reader"] .question-body { padding-inline: 18px; }
+  html.review-tablet body[data-view="reader"] .question-header { padding-inline: 18px; }
+  html.review-tablet body[data-view="reader"] .question-title { font-size: 19px; }
+  html.review-tablet body[data-view="reader"] .notes-toggle, html.review-tablet body[data-view="reader"] .notes-editor { padding-inline: 18px; }
+  html.review-tablet body[data-view="reader"] .answer-details > summary { flex-wrap: wrap; }
+  html.review-tablet body[data-view="reader"] .answer-details > summary small { font-size: 11px; }
+}
+@media (max-height: 600px) and (min-width: 761px) {
+  html.review-tablet .home-view.hero-home { min-height: 460px; }
+  html.review-tablet .hero-bottom { bottom: 78px; }
+  html.review-tablet .campaign-mini-map { max-height: 130px; }
+  html.review-tablet .hero-entry .home-resume { margin-top: 12px; padding-top: 10px; }
+  html.review-tablet .hero-course-button { min-height: 54px; }
+  html.review-tablet .hero-baseline { bottom: 10px; }
+  html.review-tablet .tablet-course-heading { padding-bottom: 10px; }
+  html.review-tablet .tablet-course-heading strong { margin-bottom: 8px; font-size: 15px; }
+  html.review-tablet .tablet-outline-heading { padding-block: 12px 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.review-tablet .tablet-question-link, html.review-tablet .tablet-outline-dialog { transition: none; }
+}
+@media (prefers-contrast: more) {
+  html.review-tablet .tablet-question-number, html.review-tablet .tablet-outline-position { color: #644936; }
+  html.review-tablet .tablet-outline { border-color: #977556; }
+}
+@media print {
+  .tablet-outline, .tablet-outline-toggle, .tablet-outline-dialog { display: none !important; }
+  html.review-tablet body[data-view="reader"] .reader-view { padding-left: 0; max-width: none; }
+}

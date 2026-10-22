@@ -1,10 +1,10 @@
 /* Public runtime. The private content key is supplied in the URL fragment or by the user. */
 (() => {
   'use strict';
-  const base='/study-center/',version='2026-10-22-mvjld2fw';
-  const scripts=["/study-center/vendor/marked/marked.umd.js","/study-center/vendor/katex/katex.min.js","/study-center/vendor/jszip/jszip.min.js","/study-center/assets/browser-store.js","/study-center/assets/app.js","/study-center/assets/poetry.js","/study-center/assets/experience.js","/study-center/assets/fullscreen.js","/study-center/assets/hero.js","/study-center/assets/campaign.js","/study-center/assets/mobile.js"];
+  const base='/study-center/',version='2026-10-22-mvjp7xwi';
+  const scripts=["/study-center/vendor/marked/marked.umd.js","/study-center/vendor/katex/katex.min.js","/study-center/vendor/jszip/jszip.min.js","/study-center/assets/browser-store.js","/study-center/assets/app.js","/study-center/assets/poetry.js","/study-center/assets/experience.js","/study-center/assets/fullscreen.js","/study-center/assets/hero.js","/study-center/assets/campaign.js","/study-center/assets/mobile.js","/study-center/assets/tablet.js"];
   const accessDB='review-center-web-access';
-  let manifest,unlockUI,privateLink='';
+  let manifest,unlockUI,privateLink='',appLoaded=false;
   const books=new Map();
   function dbAccess(){return new Promise((resolve,reject)=>{const request=indexedDB.open(accessDB,1);request.onupgradeneeded=()=>request.result.createObjectStore('config',{keyPath:'key'});request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
   async function savedKey(value){const db=await dbAccess();try{return await new Promise((resolve,reject)=>{const transaction=db.transaction('config',value===undefined?'readonly':'readwrite'),store=transaction.objectStore('config');const request=value===undefined?store.get('content-key'):store.put({key:'content-key',value});request.onsuccess=()=>{if(value===undefined)resolve(request.result?.value||null);};transaction.oncomplete=()=>{if(value!==undefined)resolve(value);};transaction.onerror=()=>reject(transaction.error);});}finally{db.close();}}
@@ -21,14 +21,16 @@
     return unlockUI;
   }
   function askKey(message=''){const ui=unlockUI||makeUnlock();ui.error.textContent=message;if(!ui.dialog.open)ui.dialog.showModal();return new Promise(resolve=>{ui.submit=resolve;});}
-  async function waitController(){if(navigator.serviceWorker.controller)return;await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('页面初始化较慢，请刷新后重试。')),20000);navigator.serviceWorker.addEventListener('controllerchange',()=>{clearTimeout(timer);resolve();},{once:true});});}
+  async function controllerVersion(){const controller=navigator.serviceWorker.controller;if(!controller)return null;return new Promise(resolve=>{const channel=new MessageChannel(),timer=setTimeout(()=>{channel.port1.close();resolve(null);},1000);channel.port1.onmessage=event=>{clearTimeout(timer);channel.port1.close();resolve(event.data?.version||null);};controller.postMessage({type:'GET_VERSION'},[channel.port2]);});}
+  async function waitController(){const deadline=Date.now()+45000;while(Date.now()<deadline){if(await controllerVersion()===version)return;await new Promise(resolve=>setTimeout(resolve,150));}throw new Error('页面更新尚未完成。请保持联网，稍后重新打开。');}
   async function workerMessage(message,onProgress){const registration=await navigator.serviceWorker.ready;return new Promise((resolve,reject)=>{const channel=new MessageChannel();channel.port1.onmessage=event=>{const value=event.data;if(value.progress){onProgress?.(value);return;}channel.port1.close();value.error?reject(new Error(value.error)):resolve(value);};registration.active.postMessage(message,[channel.port2]);});}
   async function getBook(id){if(books.has(id))return books.get(id);const item=manifest.books.find(book=>book.id===id);if(!item)throw new Error('未找到这门课程。');const response=await fetch(base+item.path);if(!response.ok)throw new Error(response.status===401?'请重新输入私有链接解锁。':'暂时无法读取课程资料。');const book=await response.json();books.set(id,book);return book;}
   async function initialize(){
-    if(!window.isSecureContext||!navigator.serviceWorker||!crypto.subtle)throw new Error('请用 Safari 打开 HTTPS 私有链接。');
+    if(!window.isSecureContext||!navigator.serviceWorker||!crypto.subtle)throw new Error('请用 Chrome、Edge 或 Safari 打开 HTTPS 私有链接。');
+    navigator.serviceWorker.addEventListener('controllerchange',async()=>{const next=await controllerVersion();if(!appLoaded&&next&&next!==version)location.reload();});
     await navigator.serviceWorker.register(base+'sw.js',{scope:base,updateViaCache:'none'});
     await navigator.serviceWorker.ready;await waitController();
-    const response=await fetch(base+'manifest.json',{cache:'no-store'});if(!response.ok)throw new Error('暂时无法读取资料目录，请稍后重试。');manifest=await response.json();
+    const response=await fetch(base+'manifest.json',{cache:'no-store'});if(!response.ok)throw new Error('暂时无法读取资料目录，请稍后重试。');manifest=await response.json();if(manifest.version!==version)throw new Error('页面正在更新，请刷新后重试。');
     let key=null,problem='';
     if(location.hash.startsWith('#key=')){try{key=decodeKey(location.hash.slice(1));}catch(error){problem=error.message;}history.replaceState(null,'',location.pathname+location.search+'#/');}
     if(!key)try{key=await savedKey();}catch(_){problem='当前浏览器无法保存解锁状态，请确认未禁用网站储存。';}
@@ -42,6 +44,7 @@
   async function loadScript(src){return new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=()=>reject(new Error('页面资源暂时无法下载，请联网刷新。'));document.head.append(script);});}
   ready.then(async()=>{
     for(const src of scripts)await loadScript(src);
+    appLoaded=true;
     document.getElementById('site-show-unlock')?.addEventListener('click',async()=>{document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());await askKey();books.clear();location.reload();});
     document.getElementById('site-copy-private-link')?.addEventListener('click',()=>{
       const fallback=document.getElementById('site-private-link-fallback'),status=document.getElementById('site-copy-status');
