@@ -226,6 +226,10 @@ function visibleStates() { return app.active ? [...app.active.states.values()].f
 
 function updateBulkButtons() {
   const states = visibleStates();
+  const sourceStates = states.filter(st=>st.dom.source);
+  $('toggle-all-sources').disabled = !sourceStates.length;
+  $('toggle-all-sources').textContent = sourceStates.length && sourceStates.every(st=>st.dom.source.open) ? '折叠全部原图' : '展开全部原图';
+  $('toggle-all-sources').title = `作用于当前筛选显示且有原图的 ${sourceStates.length} 道题`;
   $('toggle-all-answers').disabled = $('toggle-all-notes').disabled = !states.length;
   $('toggle-all-answers').textContent = states.length && states.every(st=>st.dom.answer.open) ? '折叠全部答案' : '展开全部答案';
   $('toggle-all-notes').textContent = states.length && states.every(st=>!st.dom.notesEditor.hidden) ? '折叠全部笔记' : '展开全部笔记';
@@ -445,6 +449,68 @@ function questionLabel(question) {
 function getTopic(question) { return String(question.topic || '未分类'); }
 function isUncertain(question) { return question.confidence === '存疑' || question.confidence === '残缺'; }
 
+function layoutSourceFrame(frame, available, zoom = 1) {
+  if (available <= 0) return;
+  const w=Number(frame.dataset.width)||1800,h=Number(frame.dataset.height)||1800,rotation=Number(frame.dataset.rotation)||0;
+  const rotated=Math.abs(rotation)%180===90,boundW=rotated?h:w,boundH=rotated?w:h;
+  const scale=Math.min(available/boundW,1)*zoom;
+  frame.style.width=`${boundW*scale}px`;frame.style.height=`${boundH*scale}px`;
+  const image=frame.querySelector('img');
+  image.style.width=`${w*scale}px`;image.style.height=`${h*scale}px`;image.style.transform=`translate(-50%,-50%) rotate(${rotation}deg)`;
+}
+
+function layoutInlineSources(details) {
+  if (!details?.open) return;
+  for (const frame of details.querySelectorAll('.inline-source-frame')) {
+    const figure=frame.closest('.source-inline-item'),style=getComputedStyle(figure);
+    const available=figure.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
+    layoutSourceFrame(frame,available);
+  }
+}
+
+function createInlineSources(ctx, pages) {
+  const seen=new Set(),images=[];
+  for (const page of pages) {
+    const source=ctx.sourceMap.get(String(page));
+    for (const [index,meta] of (source?.images || []).entries()) {
+      const src=safeURL(meta.url,true);if(!src||seen.has(src))continue;
+      seen.add(src);images.push({page,meta,src,index});
+    }
+  }
+  if (!images.length) return null;
+  const details=document.createElement('details');details.className='source-details';
+  const summary=document.createElement('summary');summary.className='source-toggle';summary.textContent='展开原题图片';
+  const list=document.createElement('div');list.className='inline-source-list';details.append(summary,list);
+  let populated=false;
+  details.addEventListener('toggle',()=>{
+    summary.textContent=details.open?'收起原题图片':'展开原题图片';
+    if (details.open && !populated) {
+      populated=true;
+      const fragment=document.createDocumentFragment();
+      for (const {page,meta,src,index} of images) {
+        const figure=document.createElement('figure');figure.className='source-inline-item';
+        const frame=document.createElement('div');frame.className='source-frame inline-source-frame';
+        frame.dataset.width=Number(meta.width)||1800;frame.dataset.height=Number(meta.height)||1800;frame.dataset.rotation=Number(meta.rotation)||0;
+        const image=document.createElement('img');image.className='inline-source-image';image.loading='lazy';image.decoding='async';image.draggable=false;image.alt=`第 ${page} 页原图 ${index+1}`;
+        const error=document.createElement('div');error.className='source-inline-error';error.hidden=true;
+        const message=document.createElement('span');message.textContent='图片暂时未能加载。';
+        const retry=makeButton('重试','text-button',()=>{error.hidden=true;image.src=src;});error.append(message,retry);
+        image.addEventListener('load',()=>{error.hidden=true;if(!meta.width)frame.dataset.width=image.naturalWidth;if(!meta.height)frame.dataset.height=image.naturalHeight;layoutInlineSources(details);});
+        image.addEventListener('error',()=>{error.hidden=false;});
+        image.src=src;frame.append(image);
+        const caption=document.createElement('figcaption');const label=document.createElement('span');label.textContent=`第 ${page} 页 · 原图 ${index+1}`;
+        const zoom=makeButton('放大查看','button button-quiet',()=>openSources(ctx,[page]));zoom.setAttribute('aria-label',`放大查看第 ${page} 页原图 ${index+1}`);caption.append(label,zoom);
+        figure.append(frame,error,caption);fragment.append(figure);
+      }
+      list.append(fragment);
+      if (typeof ResizeObserver === 'function') new ResizeObserver(()=>layoutInlineSources(details)).observe(list);
+    }
+    if(details.open)requestAnimationFrame(()=>layoutInlineSources(details));
+    updateBulkButtons();
+  });
+  return details;
+}
+
 function createQuestionCard(ctx, st) {
   const q=st.question;
   const card = document.createElement('article');card.className='question-card';card.id=`q-${String(q.id).replace(/[^\w\u4e00-\u9fff-]/g,'_')}`;card.dataset.questionId=String(q.id);
@@ -470,11 +536,12 @@ function createQuestionCard(ctx, st) {
   header.append(headline,questionActions);card.append(header);
   const body=document.createElement('div');body.className='question-body';
   const questionSection=document.createElement('div');questionSection.className='question-section-label';questionSection.textContent='原题';body.append(questionSection,markdownNode(q.question || '此条目未提供可识别的文字，请核对原图。'));
-  const pages=Array.isArray(q.source_pages)?q.source_pages:[];
+  const pages=Array.isArray(q.source_pages)?[...new Map(q.source_pages.map(page=>[String(page),page])).values()]:[];
   if(pages.length){
     const links=document.createElement('div');links.className='source-links';const label=document.createElement('span');label.textContent='对照原图';links.append(label);
     for(const page of pages){const source=ctx.sourceMap.get(String(page));const label=source?`第 ${page} 页 ↗`:`第 ${page} 页（未取得）`;const button=makeButton(label,'source-link',()=>openSources(ctx,[page]));button.disabled=!source;links.append(button);}body.append(links);
   }
+  const source=createInlineSources(ctx,pages);if(source)body.append(source);
   const sourceNotes=Array.isArray(q.notes)?q.notes:q.notes?[q.notes]:[];
   if(sourceNotes.length){const notes=document.createElement('aside');notes.className='source-explanation';notes.append(markdownNode(sourceNotes.map((s)=>`- ${String(s)}`).join('\n')));body.append(notes);}
   const answer=document.createElement('details');answer.className='answer-details';answer.open=!app.hideAnswers;
@@ -500,7 +567,7 @@ function createQuestionCard(ctx, st) {
   const gallery=document.createElement('div');gallery.className='note-image-gallery';gallery.hidden=true;
   const notesBottom=document.createElement('div');notesBottom.className='notes-bottom';const noteCount=document.createElement('span');const status=document.createElement('span');status.className='save-status';notesBottom.append(noteCount,status);notesEditor.append(textarea,imageTools,gallery,notesBottom);notes.append(notesToggle,notesEditor);card.append(notes);
   notesToggle.addEventListener('click',()=>setNotesOpen(st,notesEditor.hidden,!matchMedia('(pointer:coarse)').matches));
-  st.dom={card,mark,reviewed,answer,textarea,notesToggle,notesEditor,indicator:notesToggle.querySelector('.notes-indicator'),noteCount,status,compactStatus,pinnedNotice,addImage,gallery};
+  st.dom={card,mark,reviewed,source,answer,textarea,notesToggle,notesEditor,indicator:notesToggle.querySelector('.notes-indicator'),noteCount,status,compactStatus,pinnedNotice,addImage,gallery};
   st.searchText=[q.title,q.question,q.answer,getTopic(q),...(q.followups||[]).map((f)=>`${f.question} ${f.answer}`)].join('\n').toLowerCase();
   updateQuestionControls(st);return card;
 }
@@ -824,9 +891,7 @@ function openSources(ctx,pages) {
 function layoutSourceImages() {
   if(!app.sourceView)return;const available=Math.max(150,$('source-images').clientWidth-(innerWidth<780?26:48));
   for(const frame of $('source-images').querySelectorAll('.source-frame')){
-    const w=Number(frame.dataset.width),h=Number(frame.dataset.height),rotation=Number(frame.dataset.rotation);const rotated=Math.abs(rotation)%180===90;const boundW=rotated?h:w,boundH=rotated?w:h;
-    const scale=Math.min(available/boundW,1)*app.sourceView.zoom;frame.style.width=`${boundW*scale}px`;frame.style.height=`${boundH*scale}px`;
-    const img=frame.querySelector('img');img.style.width=`${w*scale}px`;img.style.height=`${h*scale}px`;img.style.transform=`translate(-50%,-50%) rotate(${rotation}deg)`;
+    layoutSourceFrame(frame,available,app.sourceView.zoom);
   }
   $('zoom-label').textContent=app.sourceView.zoom===1?'适合宽度':`${Math.round(app.sourceView.zoom*100)}%`;
 }
@@ -876,6 +941,7 @@ function attachEvents() {
   $('topic-select').addEventListener('change',()=>setTopic($('topic-select').value));
   $('hide-answers').addEventListener('change',()=>{app.hideAnswers=$('hide-answers').checked;localWrite('review-center:hide-answers',app.hideAnswers);if(app.active)for(const st of app.active.states.values())st.dom.answer.open=!app.hideAnswers;});
   $('toggle-all-answers').addEventListener('click',()=>{const states=visibleStates();const open=!states.every(st=>st.dom.answer.open);app.hideAnswers=!open;$('hide-answers').checked=!open;localWrite('review-center:hide-answers',!open);for(const st of states)st.dom.answer.open=open;updateBulkButtons();});
+  $('toggle-all-sources').addEventListener('click',()=>{const states=visibleStates().filter(st=>st.dom.source);const open=!states.every(st=>st.dom.source.open);for(const st of states)st.dom.source.open=open;updateBulkButtons();});
   $('toggle-all-notes').addEventListener('click',()=>{const states=visibleStates();const open=!states.every(st=>!st.dom.notesEditor.hidden);for(const st of states)setNotesOpen(st,open);updateBulkButtons();});
   $('refresh-filter').addEventListener('click',()=>applyFilters(true));$('clear-filter').addEventListener('click',resetFilters);$('empty-reset-button').addEventListener('click',resetFilters);
   $('resume-button').addEventListener('click',resumeReading);
@@ -890,7 +956,7 @@ function attachEvents() {
   $('restore-button').addEventListener('click',()=>$('restore-file').click());$('restore-file').addEventListener('change',()=>restoreBackup($('restore-file').files[0]));
   $('backup-link').addEventListener('click',(event)=>{event.preventDefault();downloadBackup();});
   $('back-to-top').addEventListener('click',toggleReadingReturn);
-  window.addEventListener('resize',()=>{if($('source-dialog').open)layoutSourceImages();});
+  window.addEventListener('resize',()=>{if($('source-dialog').open)layoutSourceImages();for(const st of visibleStates())layoutInlineSources(st.dom.source);});
   window.addEventListener('scroll',()=>{if(app.returnPosition){if(window.scrollY<50)app.returnPosition.reachedTop=true;else if(app.returnPosition.reachedTop&&window.scrollY>750)app.returnPosition=null;}updateReturnButton();clearTimeout(app.scrollTimer);app.scrollTimer=setTimeout(saveReadingPosition,450);},{passive:true});
   const interruptReadingReturn=()=>{if(app.returnPosition){app.returnPosition=null;updateReturnButton();}};
   window.addEventListener('wheel',interruptReadingReturn,{passive:true});

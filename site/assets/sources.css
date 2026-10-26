@@ -1,0 +1,26 @@
+/* Original photos share the reading flow with the question and its answer. */
+.source-details { margin-top: 18px; border: 1px solid #ddcbb2; border-radius: 6px; background: #fcf8ef; overflow: hidden; }
+.source-details > summary { display: flex; align-items: center; gap: 9px; min-height: 46px; padding: 10px 14px; cursor: pointer; list-style: none; color: #8e3328; font-size: 13px; font-weight: 600; user-select: none; touch-action: manipulation; }
+.source-details > summary::-webkit-details-marker { display: none; }
+.source-details > summary::before { content: '›'; font: 23px/1 Georgia,serif; transform: rotate(0); transition: transform .15s ease; }
+.source-details[open] > summary::before { transform: rotate(90deg); }
+.source-details > summary:focus-visible { outline: 2px solid #a34a36; outline-offset: -3px; }
+.source-details > summary:hover { background: #f6ead8; }
+.inline-source-list { display: grid; gap: 16px; min-width: 0; padding: 0 12px 12px; }
+.source-inline-item { min-width: 0; width: 100%; margin: 0; padding: 10px; border: 1px solid #e1d5c3; border-radius: 4px; background: #fffdf8; }
+.inline-source-frame { max-width: 100%; margin-inline: auto; border-radius: 2px; box-shadow: none; }
+.source-inline-item > figcaption { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; margin-top: 8px; color: #7b604a; font-size: 12px; }
+.source-inline-item > figcaption .button { min-height: 44px; padding: 8px 12px; font-size: 12px; }
+.source-inline-error { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; color: #8e3328; font-size: 13px; }
+.source-inline-error .text-button { min-height: 44px; }
+html.review-tablet .source-details > summary { min-height: 52px; padding-inline: 18px; font-size: 16px; }
+html.review-tablet .source-inline-item > figcaption { font-size: 14px; }
+html.review-tablet .source-inline-item > figcaption .button { min-height: 48px; font-size: 14px; }
+@media (max-width: 600px) {
+  .source-details > summary { min-height: 48px; font-size: 14px; padding-inline: 12px; }
+  .inline-source-list { padding: 0 8px 8px; gap: 12px; }
+  .source-inline-item { padding: 6px; }
+  body[data-view="reader"] .bulk-fold-controls { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  body[data-view="reader"] .bulk-fold-controls .button { min-width: 0; padding-inline: 4px; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { .source-details > summary::before { transition: none; } }

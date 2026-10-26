@@ -1,6 +1,6 @@
 /* Encrypted content stays encrypted in the network cache. Decryption happens here. */
 'use strict';
-const BASE='/study-center/',VERSION='2026-10-22-mvjp7xwi',PREFIX='review-center-site-',CACHE=PREFIX+VERSION;
+const BASE='/study-center/',VERSION='2026-10-26-mvorjoxh',PREFIX='review-center-site-',CACHE=PREFIX+VERSION;
 let manifestPromise=null,keyPromise=null;
 function accessDB(){return new Promise((resolve,reject)=>{const request=indexedDB.open('review-center-web-access',1);request.onupgradeneeded=()=>request.result.createObjectStore('config',{keyPath:'key'});request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
 async function readAccessKey(){const db=await accessDB();try{return await new Promise((resolve,reject)=>{const request=db.transaction('config').objectStore('config').get('content-key');request.onsuccess=()=>resolve(request.result?.value||null);request.onerror=()=>reject(request.error);});}finally{db.close();}}
