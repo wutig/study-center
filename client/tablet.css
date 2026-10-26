@@ -58,7 +58,8 @@ html.review-tablet body[data-view="reader"] .chapter-select select { min-height:
 html.review-tablet body[data-view="reader"] .filter-row { flex-direction: column; align-items: stretch; gap: 12px; }
 html.review-tablet body[data-view="reader"] .filter-tabs { display: flex; width: fit-content; max-width: 100%; flex-wrap: wrap; gap: 5px; }
 html.review-tablet body[data-view="reader"] .filter-tab { min-height: 48px; font-size: 14px; padding: 10px 17px; }
-html.review-tablet body[data-view="reader"] .bulk-fold-controls { display: flex; gap: 10px; }
+html.review-tablet body[data-view="reader"] .bulk-fold-controls { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+html.review-tablet body[data-view="reader"] #toggle-all-sources { grid-column: auto; }
 html.review-tablet body[data-view="reader"] .bulk-fold-controls .button { flex: 1 1 0; min-height: 48px; font-size: 14px; padding-inline: 12px; }
 html.review-tablet body[data-view="reader"] .result-row { font-size: 13px; }
 html.review-tablet body[data-view="reader"] .reading-settings-trigger { font-size: 14px; min-height: 48px; }
@@ -204,6 +205,11 @@ html.review-tablet.tablet-keyboard-open body[data-view="reader"] .topbar { posit
   html.review-tablet .course-dialog .dialog-heading h2 { font-size: 34px; }
   html.review-tablet .hero-entry .home-resume h2 { font-size: 15px; }
   html.review-tablet .hero-entry .home-resume p { font-size: 11px; }
+}
+@media (max-width: 760px) {
+  html.review-tablet body[data-view="reader"] .bulk-fold-controls { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+  html.review-tablet body[data-view="reader"] #toggle-all-sources { grid-column: 1 / -1; }
+  html.review-tablet body[data-view="reader"] .bulk-fold-controls .button { font-size: 13px; }
 }
 @media (max-width: 480px) {
   html.review-tablet .brand-copy { font-size: 18px; }

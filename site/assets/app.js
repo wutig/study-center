@@ -468,7 +468,7 @@ function layoutInlineSources(details) {
   }
 }
 
-function createInlineSources(ctx, pages) {
+function createInlineSources(ctx, pages, cardId) {
   const seen=new Set(),images=[];
   for (const page of pages) {
     const source=ctx.sourceMap.get(String(page));
@@ -478,12 +478,18 @@ function createInlineSources(ctx, pages) {
     }
   }
   if (!images.length) return null;
-  const details=document.createElement('details');details.className='source-details';
-  const summary=document.createElement('summary');summary.className='source-toggle';summary.textContent='展开原题图片';
-  const list=document.createElement('div');list.className='inline-source-list';details.append(summary,list);
+  const details=document.createElement('details');details.className='source-details';details.id=`sources-${cardId}`;
+  const summary=document.createElement('summary');summary.className='source-toggle';summary.textContent='展开原题图片';summary.dataset.imageCount=String(images.length);summary.setAttribute('aria-label',`展开原题图片，共 ${images.length} 张`);
+  const list=document.createElement('div');list.className='inline-source-list';
+  const collapse=makeButton('收起原题图片','button button-quiet inline-source-collapse',()=>{
+    details.open=false;summary.focus({preventScroll:true});
+    requestAnimationFrame(()=>window.scrollTo({top:Math.max(0,summary.getBoundingClientRect().top+scrollY-readingTopEdge()-12),behavior:'instant'}));
+  });
+  collapse.setAttribute('aria-controls',details.id);details.append(summary,list,collapse);
   let populated=false;
   details.addEventListener('toggle',()=>{
     summary.textContent=details.open?'收起原题图片':'展开原题图片';
+    summary.setAttribute('aria-label',`${summary.textContent}，共 ${images.length} 张`);
     if (details.open && !populated) {
       populated=true;
       const fragment=document.createDocumentFragment();
@@ -541,7 +547,7 @@ function createQuestionCard(ctx, st) {
     const links=document.createElement('div');links.className='source-links';const label=document.createElement('span');label.textContent='对照原图';links.append(label);
     for(const page of pages){const source=ctx.sourceMap.get(String(page));const label=source?`第 ${page} 页 ↗`:`第 ${page} 页（未取得）`;const button=makeButton(label,'source-link',()=>openSources(ctx,[page]));button.disabled=!source;links.append(button);}body.append(links);
   }
-  const source=createInlineSources(ctx,pages);if(source)body.append(source);
+  const source=createInlineSources(ctx,pages,card.id);if(source)body.append(source);
   const sourceNotes=Array.isArray(q.notes)?q.notes:q.notes?[q.notes]:[];
   if(sourceNotes.length){const notes=document.createElement('aside');notes.className='source-explanation';notes.append(markdownNode(sourceNotes.map((s)=>`- ${String(s)}`).join('\n')));body.append(notes);}
   const answer=document.createElement('details');answer.className='answer-details';answer.open=!app.hideAnswers;

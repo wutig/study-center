@@ -1,7 +1,7 @@
 /* Public runtime. The private content key is supplied in the URL fragment or by the user. */
 (() => {
   'use strict';
-  const base='/study-center/',version='2026-10-26-mvorjoxh';
+  const base='/study-center/',version='2026-10-26-mvosm9o9';
   const scripts=["/study-center/vendor/marked/marked.umd.js","/study-center/vendor/katex/katex.min.js","/study-center/vendor/jszip/jszip.min.js","/study-center/assets/browser-store.js","/study-center/assets/app.js","/study-center/assets/poetry.js","/study-center/assets/experience.js","/study-center/assets/fullscreen.js","/study-center/assets/hero.js","/study-center/assets/campaign.js","/study-center/assets/mobile.js","/study-center/assets/tablet.js"];
   const accessDB='review-center-web-access';
   let manifest,unlockUI,privateLink='',appLoaded=false;

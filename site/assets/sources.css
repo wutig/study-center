@@ -4,6 +4,7 @@
 .source-details > summary::-webkit-details-marker { display: none; }
 .source-details > summary::before { content: '›'; font: 23px/1 Georgia,serif; transform: rotate(0); transition: transform .15s ease; }
 .source-details[open] > summary::before { transform: rotate(90deg); }
+.source-details > summary::after { display: none; }
 .source-details > summary:focus-visible { outline: 2px solid #a34a36; outline-offset: -3px; }
 .source-details > summary:hover { background: #f6ead8; }
 .inline-source-list { display: grid; gap: 16px; min-width: 0; padding: 0 12px 12px; }
@@ -13,14 +14,26 @@
 .source-inline-item > figcaption .button { min-height: 44px; padding: 8px 12px; font-size: 12px; }
 .source-inline-error { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; color: #8e3328; font-size: 13px; }
 .source-inline-error .text-button { min-height: 44px; }
+.inline-source-collapse { display: none; }
 html.review-tablet .source-details > summary { min-height: 52px; padding-inline: 18px; font-size: 16px; }
+html.review-tablet .source-details > summary::after { display: block; content: attr(data-image-count) ' 张'; margin-left: auto; padding-left: 12px; color: #856d54; font-size: 13px; font-weight: 400; }
 html.review-tablet .source-inline-item > figcaption { font-size: 14px; }
 html.review-tablet .source-inline-item > figcaption .button { min-height: 48px; font-size: 14px; }
+html.review-tablet .inline-source-collapse { display: block; width: calc(100% - 24px); min-height: 48px; margin: 0 12px 12px; border: 1px solid #ddcbb2; border-radius: 4px; font-size: 14px; color: #8e3328; background: #f7eddf; }
+@media (pointer: coarse), (max-width: 600px) {
+  .source-details > summary { min-height: 52px; font-size: 15px; }
+  .source-details > summary::after { display: block; content: attr(data-image-count) ' 张'; margin-left: auto; padding-left: 10px; color: #856d54; font-size: 12px; font-weight: 400; }
+  .source-inline-item > figcaption .button { min-height: 48px; font-size: 13px; }
+  .inline-source-collapse { display: block; width: calc(100% - 16px); min-height: 48px; margin: 0 8px 8px; border: 1px solid #ddcbb2; border-radius: 4px; font-size: 14px; color: #8e3328; background: #f7eddf; }
+}
 @media (max-width: 600px) {
-  .source-details > summary { min-height: 48px; font-size: 14px; padding-inline: 12px; }
-  .inline-source-list { padding: 0 8px 8px; gap: 12px; }
-  .source-inline-item { padding: 6px; }
-  body[data-view="reader"] .bulk-fold-controls { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  body[data-view="reader"] .bulk-fold-controls .button { min-width: 0; padding-inline: 4px; font-size: 11px; }
+  .source-details > summary { padding-inline: 12px; }
+  .inline-source-list { padding: 0 6px 8px; gap: 12px; }
+  .source-inline-item { padding: 4px; }
+}
+@media (max-width: 900px) and (pointer: coarse), (max-width: 600px) {
+  body[data-view="reader"] .bulk-fold-controls { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+  body[data-view="reader"] #toggle-all-sources { grid-column: 1 / -1; }
+  body[data-view="reader"] .bulk-fold-controls .button { min-width: 0; min-height: 48px; padding: 10px 8px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) { .source-details > summary::before { transition: none; } }
